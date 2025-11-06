@@ -1,0 +1,1034 @@
+<html>
+  <head>
+    <title>E-Commerce Website</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="E Commerce.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css">
+  </head>
+
+  <body>
+    
+    <header class="main-header">
+        <a href="#" class="header-logo">E Commerce </a>
+        <div class="search-bar-container">
+            <input type="text" id="searchInput" placeholder="Search for products, brands and more..." class="search-input">
+            <button id="searchButton" class="search-btn"><i class="fas fa-search"></i></button>
+
+            <div id="searchSuggestions" class="absolute top-full left-0 right-0 bg-white rounded-b-lg shadow-lg z-10 max-h-60 overflow-y-auto hidden border border-gray-200"></div>
+        </div>
+        <nav class="header-nav">
+            <button id="userAccountBtn" class="nav-link">
+                <i class="fas fa-user"></i> <span id="userNameDisplay">Login</span>
+            </button>
+            <button id="ordersLink" class="nav-link">
+                <i class="fas fa-box-open"></i> Orders
+            </button>
+            <button id="cartButton" class="relative nav-link focus:outline-none">
+                <i class="fas fa-shopping-cart"></i> Cart
+                <span id="cartCount" class="cart-count hidden">0</span>
+            </button>
+            <button id="logoutButton" class="nav-link hidden"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </nav>
+    </header>
+
+    <section class="marquee-section">
+        <h1>Shop Easy</h1>
+    </section>
+            
+    <div class="swiper swiper-container container mx-auto">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide"><img src="img/Infinix.png"></div>
+            <div class="swiper-slide"><img src="img/flight.png"></div>
+            <div class="swiper-slide"><img src="img/Vivo.png" ></div>
+            <div class="swiper-slide"><img src="img/Flight1.png" ></div>
+        </div>
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+            
+    
+    <main class="container mx-auto my-6 p-4 flex flex-col flex-grow">
+        <section class="product-section" id="productSection">
+            <h1>Suggested for You</h1>
+            <hr>
+            <div id="productGrid" class="product-grid">
+            
+            </div>
+            <div id="noProductsMessage" class="no-products-message hidden">No products found matching your criteria.</div>
+        </section>
+
+    
+        <section id="paymentSection" class="payment-section">
+            <h2 class="text-center text-3xl font-bold mb-6 text-gray-800">Complete Your Payment</h2>
+            <form id="paymentForm">
+                <div class="form-group">
+                    <label for="cardNumber">Card Number</label>
+                    <input type="text" id="cardNumber" placeholder="XXXX XXXX XXXX XXXX" required pattern="[0-9]{13,19}" title="Credit card numbers must be between 13 and 19 digits long." inputmode="numeric">
+                </div>
+                <div class="form-group">
+                    <label for="cardName">Name on Card</label>
+                    <input type="text" id="cardName" placeholder="Full Name" required>
+                </div>
+                <div class="flex-row">
+                    <div class="form-group">
+                        <label for="expiryDate">Expiry Date</label>
+                        <input type="text" id="expiryDate" placeholder="MM/YY" required pattern="(0[1-9]|1[0-2])\/?([0-9]{2})" title="Enter in MM/YY format, e.g., 12/25" inputmode="numeric">
+                    </div>
+                    <div class="form-group">
+                        <label for="cvv">CVV</label>
+                        <input type="password" id="cvv" placeholder="XXX" required pattern="[0-9]{3,4}" title="CVV must be 3 or 4 digits" inputmode="numeric" maxlength="4">
+                    </div>
+                </div>
+                <div class="payment-buttons">
+                    <button type="submit" class="pay-now-btn">Pay Now</button>
+                    <button type="button" id="backToCartBtn" class="back-to-cart-btn">Back to Cart</button>
+                </div>
+            </form>
+        </section>
+    </main>
+      
+    
+    <div id="tempMessage" class="temp-message hidden"></div>
+
+    <!-- Cart Sidebar -->
+    <div id="cartSidebar" class="fixed right-0 top-0 h-full w-full max-w-sm bg-white shadow-xl z-20 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+        <div class="p-4 border-b flex justify-between items-center bg-gray-50">
+            <h2 class="text-xl font-semibold text-gray-800">Your Cart</h2>
+            <button id="closeCartButton" class="text-gray-500 hover:text-gray-700 text-3xl leading-none font-light">&times;</button>
+        </div>
+        <div id="cartItemsContainer" class="cart-items-container">
+            <div id="emptyCartMessage" class="text-center text-gray-500 mt-8">Your cart is empty.</div>
+        </div>
+        <div class="w-full bg-white p-4 border-t shadow-md">
+            <div class="flex justify-between items-center font-bold text-lg mb-4">
+                <span>Total:</span>
+                <span id="cartTotal">INR 0.00</span>
+            </div>
+            <button id="checkoutButton" class="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition duration-300 font-semibold">Proceed to Checkout</button>
+        </div>
+    </div>
+    <div id="cartOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-19 hidden"></div>
+
+    <div id="productModal" class="hidden">
+        <div class="modal-content">
+            <button id="closeModalButton" class="modal-close-btn">&times;</button>
+            <div class="modal-img-container">
+                <img id="modalProductImage" src="" alt="Product Image" class="modal-product-image">
+            </div>
+            <div class="modal-details">
+                <h2 id="modalProductName" class="modal-product-name"></h2>
+                <p id="modalProductCategory" class="modal-product-category"></p>
+                <div id="modalProductRating" class="modal-product-rating"></div>
+                <p id="modalProductDescription" class="modal-product-description"></p>
+                <div class="modal-price-info">
+                    <span id="modalProductPrice" class="modal-product-price"></span>
+                    <span id="modalProductOriginalPrice" class="modal-product-original-price"></span>
+                    <span id="modalProductDiscount" class="modal-product-discount"></span>
+                </div>
+                <button id="modalAddToCartButton" class="modal-add-to-cart-btn">
+                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                </button>
+            </div>
+        </div>
+    </div>    <div id="productModalOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-[1000] hidden"></div>
+
+    <div id="authSection" class="auth-section">
+        <div class="auth-container">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">Welcome to E-Mart</h2>
+
+            <div class="tabs">
+                <button id="loginTab" class="tab-button active">Login</button>
+                <button id="signupTab" class="tab-button">Sign Up</button>
+            </div>
+
+            <div id="loginFormSection">
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="loginUsername">Username/Email</label>
+                        <input type="email" id="loginUsername" placeholder="your@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" placeholder="********" required>
+                    </div>
+                    <button type="submit" class="auth-button">Login</button>
+                </form>
+                <div id="loginMessageBox" class="message-box"></div>
+            </div>
+
+            <div id="signupFormSection" class="hidden">
+                <form id="signupForm">
+                    <div class="form-group">
+                        <label for="signupUsername">Username/Email</label>
+                        <input type="email" id="signupUsername" placeholder="your@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupPassword">Password</label>
+                        <input type="password" id="signupPassword" placeholder="********" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" id="confirmPassword" placeholder="********" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" id="fullName" placeholder="John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phoneNumber">Phone Number</label>
+                        <input type="tel" id="phoneNumber" placeholder="9876543210" pattern="[0-9]{10}" title="Please enter a 10-digit phone number" inputmode="tel" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <input type="text" id="address" placeholder="123 Main St, City, State, Zip" required>
+                    </div>
+                    <button type="submit" class="auth-button">Sign Up</button>
+                </form>
+                <div id="signupMessageBox" class="message-box"></div>
+            </div>
+
+            <div class="guest-link-container">
+                <button id="continueAsGuestBtn">Continue as Guest</button>
+            </div>
+        </div>
+      </div>
+
+    <div id="orderListModal" class="order-list-modal">
+        <div class="order-list-content">
+            <button id="closeOrderListModalBtn" class="modal-close-btn">&times;</button>
+            <h2 class="text-center text-3xl font-bold mb-6 text-gray-800">Your Orders</h2>
+            <div id="ordersContainer">            
+
+            </div>
+            <p id="noOrdersMessage" class="no-orders-message hidden">You have no past orders.</p>
+        </div>
+    </div>
+    <div id="orderListModalOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-[1000] hidden"></div>
+
+
+    <footer class="main-footer">
+        <div class="container mx-auto footer-grid">
+            <div class="footer-column">
+                <h3>About E-Mart</h3>
+                <ul>
+                    <li><a href="#" class="footer-link">Contact Us</a></li>
+                    <li><a href="#" class="footer-link">About Us</a></li>
+                    <li><a href="#" class="footer-link">Careers</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Help</h3>
+                <ul>
+                    <li><a href="#" class="footer-link">Payments</a></li>
+                    <li><a href="#" class="footer-link">Shipping</a></li>
+                    <li><a href="#" class="footer-link">Returns</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Connect</h3>
+                <div class="footer-social-links">
+                    <a href="#" class="footer-link"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="footer-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="footer-link"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copy">
+            <p>&copy; 2025 E-Mart. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+    <script>
+        var swiper = new Swiper(".swiper-container", {
+            loop: true,
+            autoplay: {
+                delay: 1000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+        });
+
+        const products = [
+            { id: 1, name: "Samsung S22 Ultra 5G (12 GB Ram , 512 GB Rom)", category: "Mobiles", description: "Experience the next generation of mobile technology with the X200 Pro. Featuring an A15 Bionic chip, a stunning 120Hz ProMotion display, and an advanced quad-camera system.", price: 39999, originalPrice: 69999, rating: 4.8, image: "img/SamsungS22.webp" },
+            { id: 2, name: "Acer Predator i5 13th Gen 13500HX", category: "Electronics", description:"Acer Predator Neo Intel Core i5 13th Gen 13500HX - (16 GB/512 GB SSD/Windows 11 Home/6 GB Graphics/NVIDIA GeForce RTX 4050) PHN16-71-59XW/ PHN16-71-553K/ PHN 16-71 Gaming Laptop  (16 Inch, Obsidian Black, 2.6 Kg)", price: 65000, originalPrice: 85000, rating: 4.5, image: "img/AcerPredator.webp" },
+            { id: 3, name: "Herculus Hank 29 T Cycle", category: "Sports", description:"HERCULES Hank 29 T (inch) Mountain Cycle  (Single Speed, Black, Rigid)",price: 12999, originalPrice: 15999, rating: 4.7, image: "img/Cycle.webp" },
+            { id: 4, name: "Wireless Noise-Cancelling Headphones (Pro)", category: "Electronics", description: "Enjoy your music without distractions. These headphones offer superior active noise cancellation and crystal-clear audio quality for an immersive listening experience.", price: 2999, originalPrice: 4500, rating: 4.6, image: "img/Noise.webp" },
+            { id: 5, name: "Organic Cotton T-Shirt (Unisex, M)", category: "Fashion", description: "Soft, breathable, and sustainably made. This organic cotton t-shirt is a staple for conscious fashion, offering comfort and style.", price: 399, originalPrice: 500, rating: 4.2, image: "img/T shirt.avif" },
+            { id: 6, name: "High-Performance Gaming Laptop (RTX 3070)", category: "Electronics", description: "Dominate the competition with this powerful gaming laptop. Equipped with the latest graphics card, high refresh rate display, and efficient cooling system.", price: 119999, originalPrice: 140000, rating: 4.9, image: "img/Gaming.avif" },
+            { id: 7, name: "Smart Home Security Camera (1080p)", category: "Appliances", description: "Monitor your home 24/7 with this intelligent security camera. Features motion detection, night vision, and two-way audio.", price: 1899, originalPrice: 2500, rating: 4.3, image: "img/camera.webp" },
+            { id: 8, name: "Running Shoes - Boost Edition (Size 9)", category: "Sports", description: "Lightweight and responsive, these running shoes provide exceptional energy return with every stride. Designed for comfort and performance.", price: 3499, originalPrice: 4500, rating: 4.6, image: "img/shoes.webp" },
+            { id: 9, name: "Cookware Set - 10 Piece Non-stick", category: "Home & Furniture", description: "A complete non-stick cookware set for all your culinary needs. Durable and easy to clean, ensuring a delightful cooking experience.", price: 2499, originalPrice: 3500, rating: 4.4, image: "img/cookware.webp" },
+            { id: 10, name: "Smart Watch - Health Tracker 2.0", category: "Electronics", description: "Track your fitness, heart rate, sleep, and more with this feature-rich smartwatch. Stay connected and motivated on your health journey.", price: 4999, originalPrice: 6000, rating: 4.5, image: "img/watch.jpg" },
+            { id: 11, name: "Premium Chef Knife Set (5 pcs)", category: "Home & Furniture", description: "Sharpen your culinary skills with this professional-grade chef knife set. Made from high-carbon stainless steel for precision and durability.", price: 1999, originalPrice: 2800, rating: 4.9, image: "img/knife.webp" },
+            { id: 12, name: "Kids' Educational Robot Kit", category: "Toys", description: "Introduce your child to the world of robotics and coding. This kit provides hands-on learning with fun, interactive challenges.", price: 1299, originalPrice: 1800, rating: 4.4, image: "img/robot.jpg" },
+            { id: 13, name: "Bluetooth Speaker - Portable", category: "Electronics", description: "Powerful sound in a compact design. This portable speaker is waterproof and delivers rich bass for outdoor adventures.", price: 1499, originalPrice: 2000, rating: 4.3, image: "img/speakers.jpg" },
+            { id: 14, name: "Yoga Mat - Eco-Friendly (6mm)", category: "Sports", description: "Practice in comfort with this non-slip, eco-friendly yoga mat. Made from sustainable materials, it provides excellent grip and cushioning.", price: 799, originalPrice: 1000, rating: 4.5, image: "img/yogamat.jpg" },
+            { id: 15, name: "Espresso Machine - Automatic", category: "Appliances", description: "Brew barista-quality coffee at home with ease. This automatic espresso machine features a milk frother and customizable settings.", price: 29999, originalPrice: 35000, rating: 4.8, image: "img/machine.webp" },
+            { id: 16, name: "Digital Drawing Tablet w/ Pen", category: "Electronics", description: "Unleash your creativity with this high-precision digital drawing tablet. Ideal for graphic designers, artists, and students.", price: 5499, originalPrice: 7000, rating: 4.6, image: "img/tablet.webp" },
+            { id: 17, name: "Adventure Backpack - 50L (Waterproof)", category: "Sports", description: "Durable and spacious, this 50-liter adventure backpack is designed for hiking, camping, and travel. Features multiple compartments and ergonomic support.", price: 2299, originalPrice: 3000, rating: 4.7, image: "img/backpack.jpg" },
+            { id: 18, name: "Electric Toothbrush - Sonic Clean", category: "Health & Personal Care", description: "Achieve a deeper clean with sonic technology. This electric toothbrush provides superior plaque removal and gum health benefits.", price: 1599, originalPrice: 2000, rating: 4.3, image: "img/toothbrush.jpg" },
+            { id: 19, name: "Gaming Mouse - RGB Chroma", category: "Electronics", description: "Precision and style for gamers. This gaming mouse features customizable RGB lighting, high DPI sensor, and programmable buttons.", price: 899, originalPrice: 1200, rating: 4.6, image: "img/mouse.jpg" },
+            { id: 20, name: "Acoustic Guitar - Beginner Pack", category: "Musical Instruments", description: "Start your musical journey with this complete beginner acoustic guitar pack. Includes guitar, gig bag, picks, and online lessons.", price: 6999, originalPrice: 9000, rating: 4.2, image: "img/guitar.jpg" }
+        ];
+
+        let cart = [];
+        let currentSearchTerm = ''; 
+        
+        const searchInput = document.getElementById('searchInput');
+        const searchButton = document.getElementById('searchButton');
+        const searchSuggestions = document.getElementById('searchSuggestions'); 
+        const productGrid = document.getElementById('productGrid'); 
+        const noProductsMessage = document.getElementById('noProductsMessage');
+        const cartButton = document.getElementById('cartButton');
+        const cartCount = document.getElementById('cartCount');
+        const tempMessage = document.getElementById('tempMessage'); 
+
+        const cartSidebar = document.getElementById('cartSidebar');
+        const closeCartButton = document.getElementById('closeCartButton');
+        const cartItemsContainer = document.getElementById('cartItemsContainer');
+        const emptyCartMessage = document.getElementById('emptyCartMessage');
+        const cartTotal = document.getElementById('cartTotal');
+        const cartOverlay = document.getElementById('cartOverlay'); 
+        const checkoutButton = document.getElementById('checkoutButton'); 
+
+        const productModal = document.getElementById('productModal');
+        const productModalOverlay = document.getElementById('productModalOverlay');
+        const closeModalButton = document.getElementById('closeModalButton');
+        const modalProductImage = document.getElementById('modalProductImage');
+        const modalProductName = document.getElementById('modalProductName');
+        const modalProductCategory = document.getElementById('modalProductCategory');
+        const modalProductDescription = document.getElementById('modalProductDescription');
+        const modalProductPrice = document.getElementById('modalProductPrice');
+        const modalProductOriginalPrice = document.getElementById('modalProductOriginalPrice');
+        const modalProductDiscount = document.getElementById('modalProductDiscount');
+        const modalProductRating = document.getElementById('modalProductRating');
+        const modalAddToCartButton = document.getElementById('modalAddToCartButton');
+
+        const paymentSection = document.getElementById('paymentSection');
+        const productSection = document.getElementById('productSection'); 
+        const paymentForm = document.getElementById('paymentForm');
+        const backToCartBtn = document.getElementById('backToCartBtn');
+        const cardNumberInput = document.getElementById('cardNumber');
+        const cardNameInput = document.getElementById('cardName');
+        const expiryDateInput = document.getElementById('expiryDate');
+        const cvvInput = document.getElementById('cvv');
+
+        const userAccountBtn = document.getElementById('userAccountBtn'); 
+        const userNameDisplay = document.getElementById('userNameDisplay');
+        const logoutButton = document.getElementById('logoutButton');
+        const authSection = document.getElementById('authSection'); 
+        const loginTab = document.getElementById('loginTab');
+        const signupTab = document.getElementById('signupTab');
+        const loginFormSection = document.getElementById('loginFormSection');
+        const signupFormSection = document.getElementById('signupFormSection');
+        const loginForm = document.getElementById('loginForm');
+        const signupForm = document.getElementById('signupForm');
+        const loginMessageBox = document.getElementById('loginMessageBox');
+        const signupMessageBox = document.getElementById('signupMessageBox');
+        const continueAsGuestBtn = document.getElementById('continueAsGuestBtn'); 
+
+        const loginUsernameInput = document.getElementById('loginUsername');
+        const loginPasswordInput = document.getElementById('loginPassword');
+
+        const signupUsernameInput = document.getElementById('signupUsername');
+        const signupPasswordInput = document.getElementById('signupPassword');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const fullNameInput = document.getElementById('fullName');
+        const phoneNumberInput = document.getElementById('phoneNumber');
+        const addressInput = document.getElementById('address');
+
+        const ordersLink = document.getElementById('ordersLink');
+        const orderListModal = document.getElementById('orderListModal');
+        const closeOrderListModalBtn = document.getElementById('closeOrderListModalBtn');
+        const ordersContainer = document.getElementById('ordersContainer');
+        const noOrdersMessage = document.getElementById('noOrdersMessage');
+        const orderListModalOverlay = document.getElementById('orderListModalOverlay');
+
+
+        const formatCurrency = (amount) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(amount);
+        
+        const getStarRatingHtml = (rating) => {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                if (rating >= i) { stars += '<i class="fas fa-star"></i>'; }
+                else if (rating > (i - 1) && rating < i) { stars += '<i class="fas fa-star-half-alt"></i>'; }
+                else { stars += '<i class="far fa-star"></i>'; }
+            }
+            return stars;
+        };
+
+        const createProductCard = (product) => {
+            const card = document.createElement('div');
+            card.className = 'prod-item'; 
+            card.setAttribute('data-product-id', product.id);
+
+            const discount = product.originalPrice && product.originalPrice > product.price
+                ? ((product.originalPrice - product.price) / product.originalPrice * 100).toFixed(0)
+                : 0;
+
+            card.innerHTML = `
+                <a href="#" class="block w-full">
+                    <img src="${product.image}" alt="${product.name}" class="prod-img">
+                </a>
+                <h2>
+                    <a href="#" class="text-gray-900 hover:text-blue-700 transition block leading-tight">
+                        ${product.name}
+                    </a>
+                </h2>
+                <p class="text-blue-600 mb-1">${product.category}</p>
+                <div class="prod-rating">
+                    ${getStarRatingHtml(product.rating)}
+                    <span class="ml-1 text-gray-600 text-xs">(${product.rating})</span>
+                </div>
+                <p class="mb-2">
+                    <span class="price">${formatCurrency(product.price)}</span>
+                    ${product.originalPrice > product.price ? `<del>${formatCurrency(product.originalPrice)}</del>` : ''}
+                </p>
+                ${discount > 0 ? `<p class="discount">${discount}% off</p>` : ''}
+                <button class="btn-add-to-cart mt-3">
+                    <i class="fas fa-shopping-cart mr-2"></i> Add to Cart
+                </button>
+            `;
+
+            card.querySelector('img').addEventListener('click', (event) => {
+                event.preventDefault(); 
+                showProductDetail(product); 
+            });
+            card.querySelector('h2 a').addEventListener('click', (event) => {
+                event.preventDefault(); 
+                showProductDetail(product); 
+            });
+            card.querySelector('.btn-add-to-cart').addEventListener('click', (event) => {
+                event.stopPropagation(); 
+                addProductToCart(product); 
+            });
+
+            return card;
+        };
+
+        const displayProducts = (productsToDisplay) => {
+            productGrid.innerHTML = ''; 
+            if (productsToDisplay.length === 0) {
+                noProductsMessage.classList.remove('hidden');
+            } else {
+                noProductsMessage.classList.add('hidden');
+                productsToDisplay.forEach(product => {
+                    productGrid.appendChild(createProductCard(product));
+                });
+            }
+        };
+
+        const filterProducts = () => {
+            let filteredProducts = products;
+
+            if (currentSearchTerm) {
+                const searchTermLower = currentSearchTerm.toLowerCase();
+                filteredProducts = filteredProducts.filter(p => 
+                    p.name.toLowerCase().includes(searchTermLower) || 
+                    p.description.toLowerCase().includes(searchTermLower) || 
+                    p.category.toLowerCase().includes(searchTermLower)
+                );
+            } else {
+                filteredProducts = products;
+            }
+            displayProducts(filteredProducts);
+        };
+
+        const handleSearch = () => {
+            currentSearchTerm = searchInput.value.trim();
+            filterProducts(); 
+        };
+        
+        let currentProductInModal = null; 
+
+        const showProductDetail = (product) => {
+            currentProductInModal = product; 
+            modalProductImage.src = product.image;
+            modalProductImage.alt = product.name;
+            modalProductName.textContent = product.name;
+            modalProductCategory.textContent = product.category;
+            modalProductDescription.textContent = product.description;
+            modalProductPrice.textContent = formatCurrency(product.price);
+            modalProductRating.innerHTML = getStarRatingHtml(product.rating) + `<span class="ml-1 text-gray-600 text-xs">(${product.rating})</span>`;
+
+            if (product.originalPrice && product.originalPrice > product.price) {
+                modalProductOriginalPrice.textContent = formatCurrency(product.originalPrice);
+                modalProductOriginalPrice.classList.remove('hidden');
+                const discount = ((product.originalPrice - product.price) / product.originalPrice * 100).toFixed(0);
+                modalProductDiscount.textContent = `${discount}% off`;
+                modalProductDiscount.classList.remove('hidden');
+            } else {
+                modalProductOriginalPrice.classList.add('hidden');
+                modalProductDiscount.classList.add('hidden');
+            }
+
+            modalAddToCartButton.onclick = () => {
+                addProductToCart(currentProductInModal);
+                hideProductDetail(); 
+            };
+
+            productModal.classList.add('open');
+            productModal.classList.remove('hidden'); 
+            productModalOverlay.classList.add('open');
+            productModalOverlay.classList.remove('hidden'); 
+            document.body.classList.add('overflow-hidden'); 
+        };
+
+        const hideProductDetail = () => {
+            productModal.classList.remove('open');
+            setTimeout(() => {
+                productModal.classList.add('hidden'); 
+            }, 300); 
+            
+            productModalOverlay.classList.remove('open');
+            setTimeout(() => {
+                productModalOverlay.classList.add('hidden'); 
+            }, 300);
+            document.body.classList.remove('overflow-hidden'); 
+        };
+
+
+        // --- Cart Functions ---
+        const addProductToCart = (productToAdd) => {
+            const existingItemIndex = cart.findIndex(item => item.id === productToAdd.id);
+            if (existingItemIndex > -1) {
+                cart[existingItemIndex].quantity++;
+                showTemporaryMessage(`${productToAdd.name} quantity updated in cart!`);
+            } else {
+                cart.push({ ...productToAdd, quantity: 1 });
+                showTemporaryMessage(`${productToAdd.name} added to cart!`);
+            }
+            updateCartCount(); 
+            console.log('Current Cart:', cart); 
+            renderCart(); 
+        };
+
+        const removeProductFromCart = (productId) => { 
+            cart = cart.filter(item => item.id !== productId);
+            updateCartCount();
+            renderCart(); 
+            showTemporaryMessage('Item removed from cart.');
+        };
+
+        const updateCartQuantity = (productId, newQuantity) => { 
+            const itemIndex = cart.findIndex(item => item.id === productId);
+            if (itemIndex > -1) {
+                if (newQuantity < 1) {
+                    removeProductFromCart(productId); 
+                } else {
+                    cart[itemIndex].quantity = newQuantity;
+                    showTemporaryMessage(`Quantity updated for ${cart[itemIndex].name}.`);
+                }
+            }
+            updateCartCount();
+            renderCart(); 
+        };
+
+        const updateCartCount = () => { 
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.textContent = totalItems; 
+            cartCount.classList.toggle('hidden', totalItems === 0); 
+        }; 
+
+        const showTemporaryMessage = (message) => {
+            tempMessage.textContent = message;
+            tempMessage.classList.add('show');
+            tempMessage.classList.remove('hidden');
+
+            setTimeout(() => {
+                tempMessage.classList.remove('show');
+                setTimeout(() => {
+                    tempMessage.classList.add('hidden');
+                }, 500); 
+            }, 2500); 
+        };
+
+        const openCart = () => {
+            cartSidebar.classList.add('open');
+            cartOverlay.classList.add('open');
+            document.body.classList.add('overflow-hidden'); 
+            renderCart(); 
+        };
+
+        const closeCart = () => {
+            cartSidebar.classList.remove('open');
+            cartOverlay.classList.remove('open');
+            document.body.classList.remove('overflow-hidden'); 
+        };
+
+        const renderCart = () => {
+            cartItemsContainer.innerHTML = ''; 
+            let currentTotal = 0;
+
+            if (cart.length === 0) {
+                emptyCartMessage.classList.remove('hidden');
+            } else {
+                emptyCartMessage.classList.add('hidden');
+                cart.forEach(item => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'cart-item-element'; 
+
+                    currentTotal += item.price * item.quantity;
+
+                    itemElement.innerHTML = `
+                        <img src="${item.image}" alt="${item.name}" class="cart-item-img">
+                        <div class="cart-item-details">
+                            <h3 class="cart-item-name">${item.name}</h3>
+                            <p class="cart-item-price">${formatCurrency(item.price)}</p>
+                            <div class="cart-quantity-controls">
+                                <button class="quantity-btn decrease" data-product-id="${item.id}">-</button>
+                                <input type="number" value="${item.quantity}" min="1" class="quantity-input" data-product-id="${item.id}">
+                                <button class="quantity-btn increase" data-product-id="${item.id}">+</button>
+                            </div>
+                        </div>
+                        <button class="remove-item-btn" data-product-id="${item.id}">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    `;
+                    cartItemsContainer.appendChild(itemElement);
+
+                    itemElement.querySelector('.quantity-btn.decrease').addEventListener('click', () => updateCartQuantity(item.id, item.quantity - 1));
+                    itemElement.querySelector('.quantity-btn.increase').addEventListener('click', () => updateCartQuantity(item.id, item.quantity + 1));
+                    itemElement.querySelector('.quantity-input').addEventListener('change', (e) => {
+                        const newQty = parseInt(e.target.value);
+                        if (!isNaN(newQty) && newQty >= 1) {
+                            updateCartQuantity(item.id, newQty);
+                        }
+                    });
+
+                    itemElement.querySelector('.remove-item-btn').addEventListener('click', () => removeProductFromCart(item.id));
+                });
+            }
+
+            cartTotal.textContent = formatCurrency(currentTotal);
+        };
+
+        const showPaymentSection = () => {
+            closeCart(); 
+            productSection.classList.add('hidden'); 
+            paymentSection.classList.add('open'); 
+            
+            authSection.classList.remove('open');
+            orderListModal.classList.remove('open');
+            orderListModalOverlay.classList.add('hidden'); 
+
+            document.body.classList.add('overflow-hidden'); 
+            paymentForm.reset();
+        };
+
+        const hidePaymentSection = () => {
+            paymentSection.classList.remove('open'); 
+            productSection.classList.remove('hidden');
+            document.body.classList.remove('overflow-hidden'); 
+        };
+
+        const processPayment = (event) => {
+            event.preventDefault(); 
+
+            if (cart.length === 0) {
+                showTemporaryMessage("Your cart is empty. Cannot process payment.");
+                hidePaymentSection();
+                return;
+            }
+
+            const cardNumber = cardNumberInput.value.trim();
+            const cardName = cardNameInput.value.trim();
+            const expiryDate = expiryDateInput.value.trim();
+            const cvv = cvvInput.value.trim();
+
+            if (!cardNumber || !cardName || !expiryDate || !cvv) {
+                showTemporaryMessage("Please fill in all payment details.");
+                return;
+            }
+            
+            console.log("Processing payment for:", cart);
+            console.log("Card Number:", cardNumber);
+            console.log("Card Name:", cardName);
+            console.log("Expiry Date:", expiryDate);
+            console.log("CVV:", cvv);
+
+            const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+            if (loggedInUser) {
+                const newOrder = {
+                    orderId: `ORD-${Date.now()}`, 
+                    userId: loggedInUser.username, 
+                    orderDate: new Date().toLocaleDateString(),
+                    totalAmount: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+                    items: cart.map(item => ({
+                        productId: item.id,
+                        name: item.name,
+                        quantity: item.quantity,
+                        price: item.price
+                    })),
+                    status: 'Pending'
+                };
+                mockOrders.push(newOrder);
+                saveOrdersToLocalStorage();
+            }
+
+            
+            showTemporaryMessage("Payment successful! Your order has been placed.");
+            cart = []; 
+            updateCartCount();
+            renderCart();
+            hidePaymentSection();
+        };
+        let mockUsers = JSON.parse(localStorage.getItem('mockUsers')) || [];
+        
+        let mockOrders = JSON.parse(localStorage.getItem('mockOrders')) || [
+            
+            {
+                orderId: "ORD-001",
+                userId: "test@example.com",
+                orderDate: "2024-06-01",
+                totalAmount: 79999,
+                items: [{ productId: 1, name: "Samsung S22 Ultra 5G (12 GB Ram , 512 GB Rom)", quantity: 1, price: 79999 }],
+                status: "Delivered"
+            },
+            {
+                orderId: "ORD-002",
+                userId: "test@example.com",
+                orderDate: "2024-06-15",
+                totalAmount: 16499,
+                items: [
+                    { productId: 4, name: "Wireless Noise-Cancelling Headphones (Pro)", quantity: 2, price: 2999 },
+                    { productId: 13, name: "Bluetooth Speaker - Portable", quantity: 1, price: 1499 }
+                ],
+                status: "Shipped"
+            },
+            {
+                orderId: "ORD-003",
+                userId: "user2@example.com",
+                orderDate: "2024-05-20",
+                totalAmount: 399,
+                items: [{ productId: 5, name: "Organic Cotton T-Shirt (Unisex, M)", quantity: 1, price: 399 }],
+                status: "Pending"
+            }
+        ];
+
+        const saveUsersToLocalStorage = () => {
+            localStorage.setItem('mockUsers', JSON.stringify(mockUsers));
+        };
+
+        const saveOrdersToLocalStorage = () => {
+            localStorage.setItem('mockOrders', JSON.stringify(mockOrders));
+        };
+
+        const showAuthSection = (initialTab = 'login') => {
+        
+            productSection.classList.add('hidden');
+            paymentSection.classList.remove('open'); 
+            orderListModal.classList.remove('open'); 
+            orderListModalOverlay.classList.add('hidden'); 
+
+            authSection.classList.add('open');
+            document.body.classList.add('overflow-hidden');
+
+            if (initialTab === 'signup') {
+                showSignupForm();
+            } else {
+                showLoginForm();
+            }
+        };
+
+        const hideAuthSection = () => {
+            authSection.classList.remove('open');
+            productSection.classList.remove('hidden');
+            document.body.classList.remove('overflow-hidden');
+        };
+
+        const showMessage = (messageBox, message, type) => {
+            messageBox.textContent = message;
+            messageBox.className = `message-box ${type}`;
+            messageBox.style.display = 'block';
+            setTimeout(() => {
+                messageBox.style.display = 'none';
+            }, 3000); 
+        };
+
+            const showLoginForm = () => {
+            loginTab.classList.add('active');
+            signupTab.classList.remove('active');
+            loginFormSection.classList.remove('hidden');
+            signupFormSection.classList.add('hidden');
+            loginMessageBox.style.display = 'none'; 
+            signupMessageBox.style.display = 'none';
+            loginForm.reset();
+            signupForm.reset();
+        };
+
+        const showSignupForm = () => {
+            signupTab.classList.add('active');
+            loginTab.classList.remove('active');
+            signupFormSection.classList.remove('hidden');
+            loginFormSection.classList.add('hidden');
+            loginMessageBox.style.display = 'none'; 
+            signupMessageBox.style.display = 'none';
+            loginForm.reset();
+            signupForm.reset();
+        };
+
+        
+        signupForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const username = signupUsernameInput.value.trim();
+            const password = signupPasswordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            const fullName = fullNameInput.value.trim();
+            const phoneNumber = phoneNumberInput.value.trim();
+            const address = addressInput.value.trim();
+
+            if (!username || !password || !confirmPassword || !fullName || !phoneNumber || !address) {
+                showMessage(signupMessageBox, "All fields are required.", "error");
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showMessage(signupMessageBox, "Passwords do not match.", "error");
+                return;
+            }
+
+            if (mockUsers.some(user => user.username.toLowerCase() === username.toLowerCase())) {
+                showMessage(signupMessageBox, "Username already exists. Please choose another.", "error");
+                return;
+            }
+
+            const newUser = {
+                username: username,
+                passwordHash: password, 
+                fullName: fullName,
+                phoneNumber: phoneNumber,
+                address: address
+            };
+
+            mockUsers.push(newUser);
+            saveUsersToLocalStorage(); 
+            showMessage(signupMessageBox, "Account created successfully! You can now log in.", "success");
+            signupForm.reset();
+            showLoginForm();
+         });
+            
+            loginForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const username = loginUsernameInput.value.trim();
+            const password = loginPasswordInput.value;
+
+            if (!username || !password) {
+                showMessage(loginMessageBox, "Please enter username/email and password.", "error");
+                return;
+            }
+
+            const user = mockUsers.find(u => u.username.toLowerCase() === username.toLowerCase());
+
+            if (user && user.passwordHash === password) { 
+                showMessage(loginMessageBox, `Welcome, ${user.fullName || user.username}! Logging in...`, "success");
+                
+                localStorage.setItem('loggedInUser', JSON.stringify({
+                    username: user.username,
+                    fullName: user.fullName,
+                    phoneNumber: user.phoneNumber,
+                    address: user.address
+                }));
+
+                setTimeout(() => {
+                    hideAuthSection();
+                    checkUserStatus(); 
+                }, 1000);
+            } else {
+                showMessage(loginMessageBox, "Invalid username/email or password.", "error");
+            }
+        });
+
+        const checkUserStatus = () => {
+            const loggedInUser = localStorage.getItem('loggedInUser');
+            if (loggedInUser) {
+                const userData = JSON.parse(loggedInUser);
+                userNameDisplay.textContent = userData.fullName || userData.username; 
+                userAccountBtn.removeEventListener('click', triggerAuthSection); 
+                userAccountBtn.addEventListener('click', showUserProfile); 
+                logoutButton.classList.remove('hidden'); 
+                ordersLink.addEventListener('click', showOrderListModal); 
+                ordersLink.style.cursor = 'pointer';
+                showTemporaryMessage(`Welcome back, ${userData.fullName || userData.username}!`);
+            } else {
+                userNameDisplay.textContent = "Login"; 
+                userAccountBtn.removeEventListener('click', showUserProfile); 
+                userAccountBtn.addEventListener('click', triggerAuthSection); 
+                logoutButton.classList.add('hidden'); 
+                ordersLink.removeEventListener('click', showOrderListModal); 
+                ordersLink.addEventListener('click', () => showTemporaryMessage("Please login to view your orders.")); 
+                ordersLink.style.cursor = 'default'; 
+            }
+        };
+
+        const logoutUser = () => {
+            localStorage.removeItem('loggedInUser'); 
+            showTemporaryMessage("You have been logged out.");
+            checkUserStatus(); 
+        };
+
+        const showUserProfile = (event) => {
+            event.preventDefault();
+            const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+            if (loggedInUser) {
+                showTemporaryMessage(`User Profile:
+                                      Full Name: ${loggedInUser.fullName || 'N/A'}
+                                      Email: ${loggedInUser.username}
+                                      Phone: ${loggedInUser.phoneNumber || 'N/A'}
+                                      Address: ${loggedInUser.address || 'N/A'}`, 'success'); 
+            }
+        };
+
+        
+        const showOrderListModal = () => {
+            const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+            if (!loggedInUser) {
+                showTemporaryMessage("Please login to view your orders.");
+                return;
+            }
+
+            
+            hideAuthSection();
+            hidePaymentSection();
+            hideProductDetail(); 
+
+            orderListModal.classList.add('open');
+            orderListModalOverlay.classList.add('open');
+            document.body.classList.add('overflow-hidden'); 
+            renderOrders(loggedInUser.username);
+        };
+
+        const hideOrderListModal = () => {
+            orderListModal.classList.remove('open');
+            orderListModalOverlay.classList.remove('open');
+            document.body.classList.remove('overflow-hidden'); 
+        };
+
+        const renderOrders = (userId) => {
+            ordersContainer.innerHTML = '';
+            const userOrders = mockOrders.filter(order => order.userId === userId);
+
+            if (userOrders.length === 0) {
+                noOrdersMessage.classList.remove('hidden');
+            } else {
+                noOrdersMessage.classList.add('hidden');
+                userOrders.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate)); 
+
+                userOrders.forEach(order => {
+                    const orderDiv = document.createElement('div');
+                    orderDiv.className = 'order-list-item';
+
+                    let itemsHtml = order.items.map(item => `
+                        <p class="order-item-detail">
+                            &bull; ${item.name} (Qty: ${item.quantity}) - ${formatCurrency(item.price * item.quantity)}
+                        </p>
+                    `).join('');
+
+                    let statusClass = '';
+                    switch(order.status.toLowerCase()) {
+                        case 'delivered': statusClass = 'status'; break;
+                        case 'pending': statusClass = 'status pending'; break;
+                        case 'shipped': statusClass = 'status shipped'; break;
+                        default: statusClass = 'status';
+                    }
+
+                    orderDiv.innerHTML = `
+                        <h3 class="flex justify-between items-center">
+                            <span>Order ID: ${order.orderId}</span>
+                            <span class="${statusClass}">${order.status}</span>
+                        </h3>
+                        <p>Order Date: ${order.orderDate}</p>
+                        <p>Total Amount: ${formatCurrency(order.totalAmount)}</p>
+                        <div class="ml-4 mt-2">
+                            <p class="font-semibold">Items:</p>
+                            ${itemsHtml}
+                        </div>
+                    `;
+                    ordersContainer.appendChild(orderDiv);
+                });
+            }
+        };
+
+
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            filterProducts(); 
+            updateCartCount(); 
+            checkUserStatus(); 
+            saveOrdersToLocalStorage(); 
+        });
+
+        searchInput.addEventListener('input', handleSearch); 
+        searchInput.addEventListener('keyup', (event) => { if (event.key === 'Enter') handleSearch(); });
+        searchButton.addEventListener('click', handleSearch);
+        document.addEventListener('click', (event) => {
+            if (searchSuggestions && searchInput && !searchSuggestions.contains(event.target) && event.target !== searchInput) {
+                searchSuggestions.classList.add('hidden');
+            }
+        });
+        
+        cartButton.addEventListener('click', openCart);
+        closeCartButton.addEventListener('click', closeCart);
+        cartOverlay.addEventListener('click', closeCart);
+
+        checkoutButton.addEventListener('click', () => {
+            if (cart.length === 0) {
+                showTemporaryMessage("Your cart is empty. Please add items before checking out.");
+                closeCart(); 
+            } else {
+                showPaymentSection();
+            }
+        });
+
+        productGrid.addEventListener('click', (event) => {
+            if (event.target.closest('.btn-add-to-cart')) {
+                return;
+            }
+
+            const productCard = event.target.closest('.prod-item');
+            if (productCard) {
+                const productId = parseInt(productCard.dataset.productId);
+                const product = products.find(p => p.id === productId);
+                if (product) {
+                    showProductDetail(product); 
+                }
+            }
+        });
+
+        closeModalButton.addEventListener('click', hideProductDetail);
+        productModalOverlay.addEventListener('click', hideProductDetail);
+
+        paymentForm.addEventListener('submit', processPayment);
+        backToCartBtn.addEventListener('click', hidePaymentSection); 
+
+        
+        const triggerAuthSection = (event) => {
+            event.preventDefault(); 
+            showAuthSection();
+        };
+
+        userAccountBtn.addEventListener('click', triggerAuthSection); 
+        logoutButton.addEventListener('click', logoutUser); 
+        loginTab.addEventListener('click', showLoginForm);
+        signupTab.addEventListener('click', showSignupForm);
+        continueAsGuestBtn.addEventListener('click', hideAuthSection); 
+
+        
+        closeOrderListModalBtn.addEventListener('click', hideOrderListModal);
+        orderListModalOverlay.addEventListener('click', hideOrderListModal);
+    </script>
+</body>
+</html>
